@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Feedback - Smart Scan Hub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+    <h2>Smart Scan Hub</h2>
+
+    <div>
+        <button onclick="window.location.href='index.html'">
+            Home
+        </button>
+
+        <button onclick="window.location.href='qr-scanner.html'">
+            QR Scanner
+        </button>
+
+        <button onclick="window.location.href='qr-generator.html'">
+            QR Generator
+        </button>
+
+        <button onclick="window.location.href='history.html'">
+            Scan History
+        </button>
+
+        <button onclick="window.location.href='generatorhistory.html'">
+            Generator History
+        </button>
+
+        <button onclick="window.location.href='contact.html'">
+            Contact
+        </button>
+    </div>
+</nav>
+<h1>Feedback History</h1>
+
+<div id="feedbackList"></div>
+
+<br>
+
+<button onclick="clearFeedback()">Clear Feedback</button>
+
+<button onclick="window.location.href='index.html'">
+    🏠 Home
+</button>
+
+<script>
+
+function loadFeedback() {
+
+    const feedbackList =
+        JSON.parse(localStorage.getItem("feedbackList")) || [];
+
+    const container =
+        document.getElementById("feedbackList");
+
+    container.innerHTML = "";
+
+    if (feedbackList.length === 0) {
+
+        container.innerHTML =
+            "<p>No feedback submitted yet.</p>";
+
+        return;
+    }
+
+    feedbackList.forEach(function(item, index) {
+
+        const box = document.createElement("div");
+
+        const name = document.createElement("h3");
+
+name.innerText = item.name;
+
+const feedback = document.createElement("p");
+
+feedback.innerText = item.feedback;
+
+const deleteButton = document.createElement("button");
+
+deleteButton.innerText = "Delete";
+
+deleteButton.onclick = function() {
+
+    let list =
+        JSON.parse(localStorage.getItem("feedbackList")) || [];
+
+    list.splice(index, 1);
+
+    localStorage.setItem(
+        "feedbackList",
+        JSON.stringify(list)
+    );
+
+    loadFeedback();
+};
+
+box.appendChild(name);
+box.appendChild(feedback);
+box.appendChild(deleteButton);
+
+container.appendChild(box);
+    });
+}
+
+
+function clearFeedback() {
+
+    const confirmClear =
+        confirm("Are you sure you want to clear all feedback?");
+
+    if (!confirmClear) {
+        return;
+    }
+
+    localStorage.removeItem("feedbackList");
+
+    loadFeedback();
+}
+</script>
+<button onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+    ⬆️ Back to Top
+</button>
+
+</body>
+</html>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>QR Scanner - Smart Scan Hub</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: #f4f7fb;
+            margin: 0;
+            padding: 30px;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #666;
+        }
+
+        #reader {
+            width: 350px;
+            max-width: 95%;
+            margin: 30px auto;
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        #result {
+            margin: 20px auto;
+            padding: 15px;
+            max-width: 500px;
+            background: white;
+            border-radius: 10px;
+            min-height: 25px;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 25px;
+            background: #222;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+        }
+    </style>
+	
+	<script src="https://unpkg.com/html5-qrcode"></script>
+	
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+    
+	<nav>
+    <h2>Smart Scan Hub</h2>
+
+    <div>
+        <button onclick="window.location.href='index.html'">
+            Home
+        </button>
+
+        <button onclick="window.location.href='qr-generator.html'">
+            QR Generator
+        </button>
+
+        <button onclick="window.location.href='history.html'">
+            Scan History
+        </button>
+
+        <button onclick="window.location.href='feedback.html'">
+            Feedback
+        </button>
+
+        <button onclick="window.location.href='contact.html'">
+            Contact
+        </button>
+    </div>
+</nav>
+    <h1>QR Scanner</h1>
+	
+	<div class="scanner-container">
+
+<div id="reader" style="width:300px;"></div>
+
+<div id="resultBox">
+
+    <h3>📷 Scanned Result</h3>
+
+    <p id="result">No result yet</p>
+
+</div>
+
+<button onclick="location.reload()">Scan Again</button>
+	<br><br>
+	
+	<button onclick="window.location.href='history.html'">
+    Scan History
+</button>
+
+<button onclick="window.location.href='index.html'">
+    🏠 Home
+</button>
+<button onclick="startScanner()">
+    🔄 Scan Again
+</button>
+<button onclick="copyScanResult()">
+    📋 Copy Result
+</button>
+<button onclick="shareScanResult()">
+    📤 Share Result
+</button>
+</div>
+    <p>Point your camera at a QR code</p>
+
+    <div id="reader"></div>
+
+    <div id="result">
+        Scan result will appear here.
+    </div>
+
+    <a class="back" href="index.html">← Back to Smart Scan Hub</a>
+
+
+    <script src="https://unpkg.com/html5-qrcode"></script>
+
+    <script>
+	function shareScanResult() {
+
+    const result =
+        document.getElementById("result").innerText;
+
+    if (result === "" || result === "No result") {
+
+        alert("Please scan a QR code first.");
+
+        return;
+    }
+
+    const text =
+        result.replace("Scanned Result: ", "");
+
+    if (navigator.share) {
+
+        navigator.share({
+            title: "Smart Scan Hub",
+            text: text
+        })
+        .catch(function(error) {
+            console.log(error);
+        });
+
+    } else {
+
+        alert(
+            "Sharing is not supported in this browser. Use Copy Result instead."
+        );
+
+    }
+}
+	function copyScanResult() {
+
+    const result =
+        document.getElementById("result").innerText;
+
+    if (result === "" || result === "No result") {
+
+        alert("Please scan a QR code first.");
+
+        return;
+    }
+
+    const text =
+        result.replace("Scanned Result: ", "");
+
+    navigator.clipboard.writeText(text)
+        .then(function() {
+
+            alert("Scan result copied successfully!");
+
+        })
+        .catch(function() {
+
+            alert("Unable to copy result.");
+
+        });
+}
+	function startScanner() {
+
+    document.getElementById("result").innerText = "";
+
+    html5QrCode.start(
+        { facingMode: "environment" },
+        config,
+        qrSuccess
+    ).catch(function(error) {
+
+        console.log(error);
+
+        alert("Unable to start camera.");
+
+    });
+}
+
+        function onScanSuccess(decodedText, decodedResult) {
+
+            document.getElementById("result").innerHTML =
+                "<strong>QR Result:</strong><br>" +
+                decodedText;
+
+        }
+
+
+        function onScanFailure(error) {
+            // Keep scanning
+        }
+
+
+        const scanner = new Html5QrcodeScanner(
+            "reader",
+            {
+                fps: 10,
+                qrbox: 250
+            }
+        );
+
+        scanner.render(onScanSuccess, onScanFailure);
+
+    </script>
+	
+	<script>
+    console.log("QR Scanner page loaded successfully");
+</script>
+<script>
+    const html5QrCode = new Html5Qrcode("reader");
+
+    const config = {
+        fps: 10,
+        qrbox: 250
+    };
+
+    function qrSuccess(decodedText, decodedResult) {
+
+    document.getElementById("result").innerText =
+        "Scanned Result: " + decodedText;
+
+    let history = JSON.parse(localStorage.getItem("scanHistory")) || [];
+
+    history.unshift(decodedText);
+
+    localStorage.setItem("scanHistory", JSON.stringify(history));
+
+    html5QrCode.stop().then(function () {
+        console.log("Scanner stopped");
+    }).catch(function (error) {
+        console.log(error);
+    });
+}
+    function qrError(errorMessage) {
+        // Continue scanning
+    }
+
+    html5QrCode.start(
+        { facingMode: "environment" },
+        config,
+        qrSuccess,
+        qrError
+    ).catch(function (error) {
+
+        document.getElementById("result").innerText =
+            "Camera error: " + error;
+
+        console.log(error);
+    });
+</script>
+<section class="scanner-help">
+
+    <h2>How to Scan a QR Code</h2>
+
+    <p>1. Allow camera permission when your browser asks.</p>
+
+    <p>2. Point your camera at the QR code.</p>
+
+    <p>3. Keep the QR code inside the scanning area.</p>
+
+    <p>4. Wait for the result to appear.</p>
+
+    <p>5. Use Copy Result or Share Result if needed.</p>
+
+</section>
+</body>
+</html>

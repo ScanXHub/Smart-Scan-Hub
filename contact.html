@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Contact - Smart Scan Hub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+    <h2>Smart Scan Hub</h2>
+
+    <div>
+        <button onclick="window.location.href='index.html'">Home</button>
+
+        <button onclick="window.location.href='qr-scanner.html'">
+            QR Scanner
+        </button>
+
+        <button onclick="window.location.href='qr-generator.html'">
+            QR Generator
+        </button>
+
+        <button onclick="window.location.href='history.html'">
+            Scan History
+        </button>
+
+        <button onclick="window.location.href='feedback.html'">
+            Feedback
+        </button>
+    </div>
+</nav>
+<section class="contact">
+
+    <h1>Contact Us</h1>
+
+    <p>
+        Have a question or suggestion?
+        Send us a message.
+    </p>
+
+    <input
+        type="text"
+        id="contactName"
+        placeholder="Your Name"
+    >
+
+    <br><br>
+
+    <input
+        type="email"
+        id="contactEmail"
+        placeholder="Your Email"
+    >
+
+    <br><br>
+
+    <textarea
+        id="contactMessage"
+        rows="5"
+        placeholder="Your Message"
+    ></textarea>
+
+    <br><br>
+
+    <button onclick="sendMessage()">
+        Send Message
+    </button>
+
+    <p id="contactStatus"></p>
+
+</section>
+
+<script>
+
+function sendMessage() {
+
+    const name =
+        document.getElementById("contactName").value.trim();
+
+    const email =
+        document.getElementById("contactEmail").value.trim();
+
+    const message =
+        document.getElementById("contactMessage").value.trim();
+
+    const status =
+        document.getElementById("contactStatus");
+
+    if (name === "" || email === "" || message === "") {
+
+        status.innerText =
+            "Please fill in all fields.";
+
+        return;
+    }
+
+    status.innerText =
+        "Thank you! Your message has been received.";
+
+    document.getElementById("contactName").value = "";
+    document.getElementById("contactEmail").value = "";
+    document.getElementById("contactMessage").value = "";
+}
+
+</script>
+
+</body>
+</html>

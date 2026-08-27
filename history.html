@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scan History - Smart Scan Hub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+      
+	  <nav>
+    <h2>Smart Scan Hub</h2>
+
+    <div>
+        <button onclick="window.location.href='index.html'">
+            Home
+        </button>
+
+        <button onclick="window.location.href='qr-scanner.html'">
+            QR Scanner
+        </button>
+
+        <button onclick="window.location.href='qr-generator.html'">
+            QR Generator
+        </button>
+
+        <button onclick="window.location.href='generatorhistory.html'">
+            Generator History
+        </button>
+
+        <button onclick="window.location.href='feedback.html'">
+            Feedback
+        </button>
+
+        <button onclick="window.location.href='contact.html'">
+            Contact
+        </button>
+    </div>
+</nav>
+
+    <h1>Scan History</h1>
+
+    <div id="history"></div>
+
+    <br>
+
+    <button onclick="clearHistory()">Clear History</button>
+	<button onclick="downloadHistory()">Download History</button>
+
+    <button onclick="window.location.href='index.html'">
+    🏠 Home
+</button>
+    <script>
+	function downloadHistory() {
+
+    const history =
+        JSON.parse(localStorage.getItem("scanHistory")) || [];
+
+    if (history.length === 0) {
+        alert("No scan history available.");
+        return;
+    }
+
+    const content = history
+        .map(function(item, index) {
+            return (index + 1) + ". " + item;
+        })
+        .join("\n");
+
+    const blob = new Blob(
+        [content],
+        { type: "text/plain" }
+    );
+
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = "SmartScanHub-History.txt";
+
+    link.click();
+
+    URL.revokeObjectURL(url);
+}
+
+        function loadHistory() {
+
+            const history =
+                JSON.parse(localStorage.getItem("scanHistory")) || [];
+
+            const historyDiv =
+                document.getElementById("history");
+
+            historyDiv.innerHTML = "";
+
+            if (history.length === 0) {
+
+                historyDiv.innerHTML =
+                    "<p>No scanned QR codes yet.</p>";
+
+                return;
+            }
+
+            history.forEach(function(item, index) {
+
+                const div = document.createElement("div");
+
+                const text = document.createElement("p");
+
+                text.innerText =
+                    (index + 1) + ". " + item;
+
+                const copyButton =
+                    document.createElement("button");
+
+                copyButton.innerText = "Copy";
+
+                copyButton.onclick = function() {
+
+                    navigator.clipboard.writeText(item)
+                        .then(function() {
+                            alert("Copied successfully!");
+                        })
+                        .catch(function() {
+                            alert("Unable to copy.");
+                        });
+
+                };
+
+                const deleteButton =
+                    document.createElement("button");
+
+                deleteButton.innerText = "Delete";
+
+                deleteButton.onclick = function() {
+                    deleteItem(index);
+                };
+
+                div.appendChild(text);
+                div.appendChild(copyButton);
+                div.appendChild(deleteButton);
+
+                historyDiv.appendChild(div);
+
+            });
+        }
+
+
+        function deleteItem(index) {
+
+    const confirmDelete =
+        confirm("Are you sure you want to delete this QR result?");
+
+    if (!confirmDelete) {
+        return;
+    }
+
+    let history =
+        JSON.parse(localStorage.getItem("scanHistory")) || [];
+
+    history.splice(index, 1);
+
+    localStorage.setItem(
+        "scanHistory",
+        JSON.stringify(history)
+    );
+
+    loadHistory();
+}
+
+        function clearHistory() {
+
+    const confirmClear =
+        confirm("Are you sure you want to clear all scan history?");
+
+    if (!confirmClear) {
+        return;
+    }
+
+    localStorage.removeItem("scanHistory");
+
+    loadHistory();
+}
+        loadHistory();
+
+    </script>
+	<button onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+    ⬆️ Back to Top
+</button>
+
+</body>
+</html>

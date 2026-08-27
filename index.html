@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Scan Hub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+     <header class="hero">
+	 
+	       <h1>Smart Scan Hub</h1>
+		   
+		   <p>
+		   Scan QR codes, create QR codes, and manage your QR history
+		   in one simple place.
+		   </p>
+		   <div class="hero-buttons">
+		   
+      <button onclick="window.location.href='qr-scanner.html'">
+    📷 Start Scanning
+</button>
+
+<button onclick="window.location.href='qr-generator.html'">
+    ⚡ Create QR Code
+</button>
+
+    <h1>🔍 Smart Scan Hub</h1>
+
+    <p>Scan, Generate and Manage Your Files</p>
+
+    <h2>Our Tools</h2>
+
+    <button onclick="window.location.href='qr-scanner.html'">
+    📷 QR Scanner
+</button>
+    <button onclick="window.location.href='qr-generator.html'">
+    🔳 QR Generator
+</button>
+<button onclick="window.location.href='history.html'">
+    🫆 Scan History
+</button>
+<button onclick="window.location.href='generatorhistory.html'">
+    🎯Generator History
+</button>
+<button onclick="window.location.href='feedback.html'">
+    Feedback
+</button>
+<button onclick="window.location.href='contact.html'">
+    Contact
+</button>
+    <button>🏷️ Barcode Scanner</button>
+    <br><br>
+
+    <button>📄 Document Scanner</button>
+    <br><br>
+
+    <button>🔤 Image to Text</button>
+    <br><br>
+
+    <button>🏢 Business Card Scanner</button>
+    <br><br>
+
+    <button>📁 File Generator</button>
+	
+	<script src="script.js"></script>
+	
+	<section class="about">
+    <h2>About Smart Scan Hub</h2>
+
+    <p>
+        Smart Scan Hub is a simple and user-friendly tool
+        for scanning and generating QR codes.
+    </p>
+</section>
+<section class="features">
+
+    <h2>Our Features</h2>
+
+    <div class="feature-box">
+
+        <div>
+            <h3>📷 QR Scanner</h3>
+            <p>Scan QR codes quickly using your camera.</p>
+        </div>
+
+        <div>
+            <h3>⚡ QR Generator</h3>
+            <p>Create QR codes from text or URLs.</p>
+        </div>
+
+        <div>
+            <h3>🕘 Scan History</h3>
+            <p>Keep track of your previously scanned QR codes.</p>
+        </div>
+
+        <div>
+            <h3>💾 Download</h3>
+            <p>Download your QR codes and history for later use.</p>
+        </div>
+
+    </div>
+
+</section>
+<section class="how-it-works">
+
+    <h2>How It Works</h2>
+
+    <div class="steps">
+
+        <div>
+            <h3>1️⃣ Choose a Tool</h3>
+            <p>Select QR Scanner or QR Generator.</p>
+        </div>
+
+        <div>
+            <h3>2️⃣ Scan or Generate</h3>
+            <p>Scan a QR code or enter text to create one.</p>
+        </div>
+
+        <div>
+            <h3>3️⃣ Save Your Result</h3>
+            <p>Copy, download, or view your history.</p>
+        </div>
+
+    </div>
+
+</section>
+<section class="quick-access">
+
+    <h2>Quick Access</h2>
+
+    <div class="quick-buttons">
+
+        <button onclick="window.location.href='qrscanner.html'">
+            📷 Scan QR
+        </button>
+
+        <button onclick="window.location.href='qrgenerator.html'">
+            ⚡ Generate QR
+        </button>
+
+        <button onclick="window.location.href='history.html'">
+            🕘 Scan History
+        </button>
+
+        <button onclick="window.location.href='generatorhistory.html'">
+            📋 Generator History
+        </button>
+
+        <button onclick="window.location.href='feedback.html'">
+            💬 Feedback
+        </button>
+
+        <button onclick="window.location.href='contact.html'">
+            📧 Contact
+        </button>
+
+    </div>
+
+</section>
+<section class="why-section">
+
+    <h2>Why Smart Scan Hub?</h2>
+
+    <div class="why-box">
+
+        <div>
+            <h3>🚀 Fast</h3>
+            <p>Quickly scan and generate QR codes.</p>
+        </div>
+
+        <div>
+            <h3>🔒 Private</h3>
+            <p>Your history is stored locally in your browser.</p>
+        </div>
+
+        <div>
+            <h3>📱 Easy to Use</h3>
+            <p>Designed to work on computers and mobile devices.</p>
+        </div>
+
+    </div>
+
+</section>
+<section class="contact">
+
+    <h2>Contact & Feedback</h2>
+
+    <p>Have a suggestion or found a problem? Let us know.</p>
+
+    <input
+        type="text"
+        id="feedbackName"
+        placeholder="Your Name"
+    >
+
+    <br><br>
+
+    <textarea
+        id="feedbackText"
+        placeholder="Write your feedback"
+        rows="5"
+    ></textarea>
+
+    <br><br>
+
+    <button onclick="submitFeedback()">
+        Submit Feedback
+    </button>
+
+    <p id="feedbackMessage"></p>
+
+</section>
+<section class="privacy">
+
+    <h2>Privacy</h2>
+
+    <p>
+        Your QR scan and generator history is stored locally
+        in your browser. Smart Scan Hub does not send your
+        history to a server.
+    </p>
+
+</section>
+<section class="qr-tips">
+
+    <h2>QR Code Tips</h2>
+
+    <div class="tips-box">
+
+        <div>
+            <h3>📱 Keep it Clear</h3>
+            <p>
+                Make sure the QR code is clearly visible
+                when scanning.
+            </p>
+        </div>
+
+        <div>
+            <h3>💡 Good Lighting</h3>
+            <p>
+                Use enough light so your camera can
+                recognize the QR code easily.
+            </p>
+        </div>
+
+        <div>
+            <h3>🔍 Check the Result</h3>
+            <p>
+                Always check the scanned information
+                before opening unknown links.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+<section class="about-project">
+
+    <h2>About Smart Scan Hub</h2>
+
+    <p>
+        Smart Scan Hub is a simple web-based QR code utility
+        that allows users to scan QR codes and generate QR
+        codes quickly.
+    </p>
+
+    <p>
+        Users can copy, download, share, and manage their
+        QR activity through the history features.
+    </p>
+
+    <p>
+        The project is designed to be simple, fast,
+        user-friendly, and mobile-friendly.
+    </p>
+
+</section>
+<section class="project-status">
+
+    <h2>Project Status</h2>
+
+    <div class="status-box">
+
+        <h3>✅ Ready to Use</h3>
+
+        <p>
+            Smart Scan Hub is ready for QR scanning,
+            QR generation, history management,
+            copying, downloading, and sharing.
+        </p>
+
+    </div>
+
+</section>
+<footer>
+<button id="topButton" onclick="scrollToTop()">
+    ⬆️ Back to Top
+</button>
+
+    <h3>Smart Scan Hub</h3>
+
+    <p>
+        Your simple QR scanning and generation platform.
+    </p>
+
+    <div class="footer-links">
+
+        <button onclick="window.location.href='index.html'">
+            Home
+        </button>
+
+        <button onclick="window.location.href='qrscanner.html'">
+            QR Scanner
+        </button>
+
+        <button onclick="window.location.href='qrgenerator.html'">
+            QR Generator
+        </button>
+
+        <button onclick="window.location.href='contact.html'">
+            Contact
+        </button>
+
+    </div>
+
+    <p class="copyright">
+        © 2026 Smart Scan Hub. All Rights Reserved.
+    </p>
+
+</footer>
+<script src="script.js"></script>
+
+</body>
+</html>

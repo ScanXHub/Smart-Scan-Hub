@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generator History - Smart Scan Hub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+      <nav>
+    <h2>Smart Scan Hub</h2>
+
+    <div>
+        <button onclick="window.location.href='index.html'">
+            Home
+        </button>
+
+        <button onclick="window.location.href='qr-scanner.html'">
+            QR Scanner
+        </button>
+
+        <button onclick="window.location.href='qr-generator.html'">
+            QR Generator
+        </button>
+
+        <button onclick="window.location.href='history.html'">
+            Scan History
+        </button>
+
+        <button onclick="window.location.href='feedback.html'">
+            Feedback
+        </button>
+
+        <button onclick="window.location.href='contact.html'">
+            Contact
+        </button>
+    </div>
+</nav>
+
+    <h1>Generator History</h1>
+
+    <div id="generatorHistory"></div>
+
+    <br>
+
+    <button onclick="clearGeneratorHistory()">
+        Clear History
+    </button>
+
+    <button onclick="downloadGeneratorHistory()">
+        Download History
+    </button>
+
+    <button onclick="window.location.href='index.html'">
+    🏠 Home
+</button>
+    <script>
+
+        function loadGeneratorHistory() {
+
+            const history =
+                JSON.parse(localStorage.getItem("generatorHistory")) || [];
+
+            const historyDiv =
+                document.getElementById("generatorHistory");
+
+            historyDiv.innerHTML = "";
+
+            if (history.length === 0) {
+
+                historyDiv.innerHTML =
+                    "<p>No generated QR codes yet.</p>";
+
+                return;
+            }
+
+            history.forEach(function(item, index) {
+
+                const div = document.createElement("div");
+
+                const text = document.createElement("p");
+
+                text.innerText =
+                    (index + 1) + ". " + item;
+
+                const copyButton =
+                    document.createElement("button");
+
+                copyButton.innerText = "Copy";
+
+                copyButton.onclick = function() {
+
+                    navigator.clipboard.writeText(item)
+                        .then(function() {
+                            alert("Copied successfully!");
+                        })
+                        .catch(function() {
+                            alert("Unable to copy.");
+                        });
+
+                };
+
+                const deleteButton =
+                    document.createElement("button");
+
+                deleteButton.innerText = "Delete";
+
+                deleteButton.onclick = function() {
+
+    const confirmDelete =
+        confirm("Are you sure you want to delete this generated QR?");
+
+    if (!confirmDelete) {
+        return;
+    }
+
+    let history =
+        JSON.parse(
+            localStorage.getItem("generatorHistory")
+        ) || [];
+
+    history.splice(index, 1);
+
+    localStorage.setItem(
+        "generatorHistory",
+        JSON.stringify(history)
+    );
+
+    loadGeneratorHistory();
+};
+                div.appendChild(text);
+                div.appendChild(copyButton);
+                div.appendChild(deleteButton);
+
+                generatorHistory.appendChild(div);
+
+            });
+        }
+
+
+        function clearGeneratorHistory() {
+
+    const confirmClear =
+        confirm("Are you sure you want to clear all generator history?");
+
+    if (!confirmClear) {
+        return;
+    }
+
+    localStorage.removeItem("generatorHistory");
+
+    loadGeneratorHistory();
+}
+
+        function downloadGeneratorHistory() {
+
+            const history =
+                JSON.parse(localStorage.getItem("generatorHistory")) || [];
+
+            if (history.length === 0) {
+
+                alert("No generator history available.");
+
+                return;
+            }
+
+            let content = "";
+
+            history.forEach(function(item, index) {
+
+                content += (index + 1) + ". " + item + "\n";
+
+            });
+
+            const blob = new Blob(
+                [content],
+                { type: "text/plain;charset=utf-8" }
+            );
+
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement("a");
+
+            link.href = url;
+
+            link.download =
+                "SmartScanHub-Generator-History.txt";
+
+            document.body.appendChild(link);
+
+            link.click();
+
+            document.body.removeChild(link);
+
+            URL.revokeObjectURL(url);
+        }
+
+
+        loadGeneratorHistory();
+
+    </script>
+	<button onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+    ⬆️ Back to Top
+</button>
+
+</body>
+</html>

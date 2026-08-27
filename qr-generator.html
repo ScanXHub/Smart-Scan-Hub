@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>QR Generator - Smart Scan Hub</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+
+<body>
+      
+    <nav>
+    <h2>Smart Scan Hub</h2>
+
+    <div>
+        <button onclick="window.location.href='index.html'">
+            Home
+        </button>
+
+        <button onclick="window.location.href='qr-scanner.html'">
+            QR Scanner
+        </button>
+
+        <button onclick="window.location.href='history.html'">
+            Scan History
+        </button>
+
+        <button onclick="window.location.href='generatorhistory.html'">
+            Generator History
+        </button>
+
+        <button onclick="window.location.href='feedback.html'">
+            Feedback
+        </button>
+
+        <button onclick="window.location.href='contact.html'">
+            Contact
+        </button>
+    </div>
+</nav>	  
+
+
+<div class="generator-container">
+
+    <h1>QR Code Generator</h1>
+
+    <input type="text" id="qrText" maxlength="1000" oninput="updateCharacterCount()" placeholder="Enter text or URL">
+
+<p id="characterCount">0 / 1000 characters</p>
+<p id="characterWarning"></p>
+
+    <br><br>
+
+    <button onclick="generateQR()">
+        Generate QR
+    </button>
+
+    <button onclick="clearQR()">
+        Clear
+    </button>
+
+    <button onclick="downloadQR()">
+        Download QR
+    </button>
+	<button onclick="shareQR()">
+    📤 Share QR
+</button>
+
+    <button onclick="copyText()">
+        Copy Text
+    </button>
+
+    <button onclick="window.location.href='generatorhistory.html'">
+        Generator History
+    </button>
+
+    <br><br>
+
+    <div id="qrcode"></div>
+
+    <p id="message"></p>
+
+    <br>
+
+    <button onclick="window.location.href='index.html'">
+        Back to Home
+    </button>
+
+</div>
+
+
+<script>
+const qrTextBox = document.getElementById("qrText");
+const characterCount = document.getElementById("characterCount");
+const characterWarning = document.getElementById("characterWarning");
+
+qrTextBox.addEventListener("input", function () {
+
+    const count = qrTextBox.value.length;
+
+    characterCount.innerText =
+        count + " / 1000 characters";
+
+    if (count >= 900) {
+
+        characterWarning.innerText =
+            "You are close to the 1000-character limit.";
+
+    } else {
+
+        characterWarning.innerText = "";
+
+    }
+
+});
+async function shareQR() {
+
+    const canvas =
+        document.querySelector("#qrcode canvas");
+
+    if (!canvas) {
+
+        alert("Please generate a QR code first.");
+
+        return;
+    }
+
+    canvas.toBlob(async function(blob) {
+
+        if (!navigator.share) {
+
+            alert(
+                "Sharing is not supported in this browser."
+            );
+
+            return;
+        }
+
+        const file =
+            new File(
+                [blob],
+                "SmartScanHub-QR.png",
+                { type: "image/png" }
+            );
+
+        try {
+
+            await navigator.share({
+                title: "Smart Scan Hub QR Code",
+                text: "QR Code generated with Smart Scan Hub",
+                files: [file]
+            });
+
+        } catch (error) {
+
+            console.log(error);
+
+        }
+
+    }, "image/png");
+}
+
+function generateQR() {
+
+    const text =
+        document.getElementById("qrText").value.trim();
+
+    const qrCode =
+        document.getElementById("qrcode");
+
+    const message =
+        document.getElementById("message");
+
+    qrCode.innerHTML = "";
+
+    if (text === "") {
+
+        message.innerText =
+            "Please enter text or a URL.";
+
+        return;
+    }
+
+    new QRCode(qrCode, {
+        text: text,
+        width: 200,
+        height: 200
+    });
+
+    let history =
+        JSON.parse(
+            localStorage.getItem("generatorHistory")
+        ) || [];
+
+    history.unshift(text);
+
+    localStorage.setItem(
+        "generatorHistory",
+        JSON.stringify(history)
+    );
+
+    message.innerText =
+        "QR Code generated successfully!";
+}
+
+
+function clearQR() {
+
+    document.getElementById("qrText").value = "";
+
+    document.getElementById("qrcode").innerHTML = "";
+
+    document.getElementById("message").innerText = "";
+
+    document.getElementById("characterCount").innerText =
+        "0 / 1000 characters";
+
+    document.getElementById("characterWarning").innerText =
+        "";
+}
+
+function downloadQR() {
+
+    const canvas =
+        document.querySelector("#qrcode canvas");
+
+    const image =
+        document.querySelector("#qrcode img");
+
+    if (canvas) {
+
+        const link =
+            document.createElement("a");
+
+        link.href =
+            canvas.toDataURL("image/png");
+
+        link.download =
+            "SmartScanHub-QR.png";
+
+        document.body.appendChild(link);
+
+        link.click();
+
+        document.body.removeChild(link);
+
+        return;
+    }
+
+    if (image) {
+
+        const link =
+            document.createElement("a");
+
+        link.href =
+            image.src;
+
+        link.download =
+            "SmartScanHub-QR.png";
+
+        document.body.appendChild(link);
+
+        link.click();
+
+        document.body.removeChild(link);
+
+        return;
+    }
+
+    alert("Please generate a QR code first.");
+}
+function copyText() {
+
+    const text =
+        document.getElementById("qrText").value.trim();
+
+    const message =
+        document.getElementById("message");
+
+    if (text === "") {
+
+        message.innerText =
+            "Please enter text first.";
+
+        return;
+    }
+
+    navigator.clipboard.writeText(text)
+        .then(function() {
+
+            message.innerText =
+                "Text copied successfully!";
+
+        })
+        .catch(function() {
+
+            message.innerText =
+                "Unable to copy text.";
+
+        });
+}
+</script>
+
+<section class="generator-help">
+
+    <h2>How to Generate a QR Code</h2>
+
+    <p>1. Enter text, a website URL, or other information.</p>
+
+    <p>2. Click <b>Generate QR</b>.</p>
+
+    <p>3. Your QR code will appear below.</p>
+
+    <p>4. Use <b>Download QR</b> to save the QR image.</p>
+
+    <p>5. Use <b>Copy Text</b> or <b>Share QR</b> when needed.</p>
+
+</section>
+
+</body>
+</html>
